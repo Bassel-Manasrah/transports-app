@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1007536389694",
+    "firebase_url": "https://transporterapp-93dfc-default-rtdb.firebaseio.com",
+    "project_id": "transporterapp-93dfc",
+    "storage_bucket": "transporterapp-93dfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007536389694:android:0d10245487a32e8bef5b6f",
+        "android_client_info": {
+          "package_name": "com.ibraheem.shweiki.trucking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007536389694-k2bs2fkinnvvvhj0tiu1uv67ctf0sfjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo4ymxPvQivIu_xxpFQaIaRDDi8cZ1OQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007536389694-k2bs2fkinnvvvhj0tiu1uv67ctf0sfjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007536389694:android:0b7875231b459d5def5b6f",
+        "android_client_info": {
+          "package_name": "com.lba.transporterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007536389694-k2bs2fkinnvvvhj0tiu1uv67ctf0sfjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo4ymxPvQivIu_xxpFQaIaRDDi8cZ1OQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007536389694-k2bs2fkinnvvvhj0tiu1uv67ctf0sfjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
