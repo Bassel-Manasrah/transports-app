@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import TransportsScreen from "../screens/TransportsScreen";
 import ContainersScreen from "../screens/ContainersScreen";
+import ContainerDetailsScreen from "../screens/ContainerDetailsScreen";
+import CreateRecipientScreen from "../screens/CreateRecipientScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,16 @@ export default function StackNavigator() {
       <Stack.Screen
         name="Containers"
         component={ContainersScreen}
+        options={{ headerShown: false, animation: "slide_from_right" }}
+      />
+      <Stack.Screen
+        name="ContainerDetails"
+        component={ContainerDetailsScreen}
+        options={{ headerShown: false, animation: "slide_from_right" }}
+      />
+      <Stack.Screen
+        name="CreateRecipient"
+        component={CreateRecipientScreen}
         options={{ headerShown: false, animation: "slide_from_right" }}
       />
     </Stack.Navigator>
