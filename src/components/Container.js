@@ -1,19 +1,29 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import Status from "./Status";
 
-export default function Container({ containerNumber, status, customer }) {
+export default function Container({
+  containerNumber,
+  status,
+  customer,
+  onPress,
+}) {
   return (
-    <View style={styles.container}>
-      <Image source={require("../../assets/package.png")} style={styles.img} />
-      <View style={styles.detailsContainer}>
-        <Text>{customer.name}</Text>
-        <Text>{containerNumber}</Text>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/package.png")}
+          style={styles.img}
+        />
+        <View style={styles.detailsContainer}>
+          <Text>{customer.name}</Text>
+          <Text>{containerNumber}</Text>
+        </View>
+        <View style={styles.statusContainer}>
+          <Status status={status} />
+        </View>
       </View>
-      <View style={styles.statusContainer}>
-        <Status status={status} />
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
