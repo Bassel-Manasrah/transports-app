@@ -6,8 +6,82 @@ import { StatusBar } from "expo-status-bar";
 import CircularBadge from "../components/CircularBadge";
 import Chip from "../components/Chip";
 
+const dummy = [
+  {
+    fromLocation: "a",
+    toLocation: "b",
+    transportStatus: "PENDING",
+    containers: [],
+    sendingDate: "2024-12-27",
+  },
+
+  {
+    fromLocation: "a",
+    toLocation: "b",
+    transportStatus: "PENDING",
+    containers: [],
+    sendingDate: "2024-12-25",
+  },
+  {
+    fromLocation: "a",
+    toLocation: "b",
+    transportStatus: "PENDING",
+    containers: [],
+    sendingDate: "2024-12-3",
+  },
+  {
+    fromLocation: "a",
+    toLocation: "b",
+    transportStatus: "PENDING",
+    containers: [],
+    sendingDate: "2023-12-3",
+  },
+];
+
+const categorizeTransports = (transports) => {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(todayStart);
+  todayEnd.setDate(todayStart.getDate() + 1);
+
+  const startOfWeek = new Date(todayStart);
+  startOfWeek.setDate(todayStart.getDate() - todayStart.getDay()); // Adjust to Sunday
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+  const today = transports.filter((transport) => {
+    const sendingDate = new Date(transport.sendingDate);
+    return sendingDate >= todayStart && sendingDate < todayEnd;
+  });
+
+  const thisWeek = transports.filter((transport) => {
+    const sendingDate = new Date(transport.sendingDate);
+    return sendingDate >= startOfWeek && sendingDate < endOfWeek;
+  });
+
+  const thisMonth = transports.filter((transport) => {
+    const sendingDate = new Date(transport.sendingDate);
+    return sendingDate >= startOfMonth && sendingDate < endOfMonth;
+  });
+
+  const all = [...transports];
+
+  return { today, thisWeek, thisMonth, all };
+};
+
 export default function TransportsScreen({ route, navigation }) {
   const [transports, setTransports] = useState([]);
+  const [todayTransports, setTodayTransports] = useState([]);
+  const [weekTransports, setWeekTransports] = useState([]);
+  const [monthTransports, setMonthTransports] = useState([]);
+  const [allTransports, setAllTransports] = useState([]);
+
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  console.log(route.params);
 
   // Access the passed parameters
   const { driver } = route.params;
@@ -53,6 +127,14 @@ export default function TransportsScreen({ route, navigation }) {
 
     const data = await response.json();
     setTransports(data);
+
+    const { today, thisWeek, thisMonth, all } = categorizeTransports(data);
+
+    setTodayTransports(today);
+    setWeekTransports(thisWeek);
+    setMonthTransports(thisMonth);
+    setAllTransports(all);
+
     setLoading(false);
   };
 
@@ -63,23 +145,51 @@ export default function TransportsScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContianer}>
-        <Text style={styles.title}>Hello Bassel</Text>
+        <Text style={styles.title}>Hello</Text>
       </View>
       <View style={styles.listContainer}>
         <View style={styles.filtersContainer}>
-          <Chip selected>
-            <Text>Today (3)</Text>
+          <Chip
+            selected={selectedFilter == "today"}
+            onPress={() => {
+              if (selectedFilter === "today") setSelectedFilter("all");
+              else setSelectedFilter("today");
+            }}
+          >
+            <Text>Today ({todayTransports.length})</Text>
           </Chip>
-          <Chip>
-            <Text>Week (14)</Text>
+          <Chip
+            selected={selectedFilter == "week"}
+            onPress={() => {
+              if (selectedFilter === "week") setSelectedFilter("all");
+              else setSelectedFilter("week");
+            }}
+          >
+            <Text>Week ({weekTransports.length})</Text>
           </Chip>
-          <Chip>
-            <Text>Month (54)</Text>
+          <Chip
+            selected={selectedFilter == "month"}
+            onPress={() => {
+              if (selectedFilter === "month") setSelectedFilter("all");
+              else setSelectedFilter("month");
+            }}
+          >
+            <Text>Month ({monthTransports.length})</Text>
           </Chip>
         </View>
         <FlatList
           contentContainerStyle={styles.flatListContainer}
-          data={transports}
+          data={
+            selectedFilter === "all"
+              ? allTransports
+              : selectedFilter === "month"
+              ? monthTransports
+              : selectedFilter === "week"
+              ? weekTransports
+              : selectedFilter === "today"
+              ? todayTransports
+              : []
+          }
           renderItem={({ item }) => (
             <Transport
               from={item.fromLocation}
@@ -91,13 +201,13 @@ export default function TransportsScreen({ route, navigation }) {
               onPress={() => {
                 navigation.navigate("Containers", {
                   containers: item.containers,
+                  transportId: item.id,
                 });
               }}
             />
           )}
         />
       </View>
-
       <StatusBar style="light" backgroundColor="#162534" />
     </SafeAreaView>
   );
