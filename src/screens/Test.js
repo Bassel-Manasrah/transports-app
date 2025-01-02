@@ -1,31 +1,39 @@
-import { View, Text } from "react-native";
 import React from "react";
-import UploadImage from "../components/UploadImage";
-import { ref, uploadBytes } from "firebase/storage";
-import * as FileSystem from "expo-file-system";
-import { decode as atob } from "base-64";
-import { storage } from "../../FirebaseConfig";
+import { SafeAreaView, StyleSheet, Button, Alert } from "react-native";
+import * as DocumentPicker from "expo-document-picker";
 
 export default function Test() {
-  const onUpload = async (uris) => {
-    console.log("onUpload");
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf", // Limit to PDF files
+        copyToCacheDirectory: true, // Optionally cache the file
+      });
 
-    const uri = uris[0];
-    console.log(uri);
-
-    const imageRef = ref(storage, "uploads/containers/" + "1");
-
-    const fetchResponse = await fetch(uri);
-    const blob = fetchResponse.blob();
-
-    await uploadBytes(imageRef, blob);
-
-    console.log(`Uploaded ${uris.length} images`);
+      if (!result.canceled) {
+        const file = result.assets[0];
+        console.log("File URI:", file.uri); // Handle the selected file
+        Alert.alert("Document Selected", `File name: ${file.name}`);
+      } else {
+        console.log("User cancelled document picker");
+      }
+    } catch (error) {
+      console.error("Error picking document:", error);
+      Alert.alert("Error", "Unable to pick document. Please try again.");
+    }
   };
 
   return (
-    <View style={{ padding: 64 }}>
-      <UploadImage onUpload={onUpload} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Button title="Upload PDF" onPress={pickDocument} />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
