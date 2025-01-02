@@ -16,7 +16,7 @@ export default function Container({
           style={styles.img}
         />
         <View style={styles.detailsContainer}>
-          <Text>{customer.name}</Text>
+          {/* <Text>{customer.name}</Text> */}
           <Text>{containerNumber}</Text>
         </View>
         <View style={styles.statusContainer}>
