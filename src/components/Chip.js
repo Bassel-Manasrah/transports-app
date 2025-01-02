@@ -5,7 +5,7 @@ import { TouchableRipple } from "react-native-paper";
 
 export default function Chip({ children, selected = false, onPress }) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, selected && styles.selected]}>
         {children}
       </View>
