@@ -6,13 +6,17 @@ import {
   arrayUnion,
   getDoc,
   getDocFromServer,
+  setDoc,
 } from "firebase/firestore";
 
-const uploadImageForContainer = async (
+const uploadImageForContainer = async ({
   uri,
-  transportNumber,
-  containerNumber
-) => {
+  transportId,
+  containerNumber,
+}) => {
+  console.log("uploadImageForContainer");
+  console.log({ uri, transportId, containerNumber });
+
   const fetchResponse = await fetch(uri);
   const blob = await fetchResponse.blob();
   const metadata = {
@@ -21,16 +25,15 @@ const uploadImageForContainer = async (
 
   const extention = uri.split(".").pop();
 
-  const fileName = `${containerNumber}_transport${transportNumber}_document_${Date.now()}.${extention}
-  }`;
+  const fileName = `${containerNumber}_transport${transportId}_document_${Date.now()}.${extention}`;
 
-  console.log(
-    `uploads/container/${containerNumber}/${transportNumber}/${fileName}`
-  );
+  console.log(`fileName: ${fileName}`);
+  getDoc;
+  console.log(`extention: ${extention}`);
 
   const imageRef = ref(
     storage,
-    `uploads/container/${containerNumber}/${transportNumber}/${Date.now()}`
+    `uploads/container/${containerNumber}/${transportId}/${Date.now()}.${extention}`
   );
 
   console.log(imageRef);
@@ -43,17 +46,44 @@ const uploadImageForContainer = async (
   console.log("Image Uploaded!");
   const downloadUrl = await getDownloadURL(imageRef);
   console.log(`${downloadUrl}`);
+  console.log(`${transportId}_container_${containerNumber}`);
+
   const docRef = doc(
     db,
     "transports",
-    `${transportNumber}_container_${containerNumber}`
+    `${transportId}_container_${containerNumber}`
   );
-  console.log(`${transportNumber}_container_${containerNumber}`);
+  console.log(`${transportId}_container_${containerNumber}`);
   console.log(docRef);
-  await updateDoc(docRef, {
-    files: arrayUnion(downloadUrl),
-  });
-  console.log("Doc Updated!");
+
+  try {
+    await updateDoc(docRef, {
+      files: arrayUnion(downloadUrl),
+    });
+    console.log("Doc Updated!");
+  } catch {
+    await setDoc(docRef, {
+      files: [downloadUrl],
+      containerNumber: containerNumber,
+      transportNumber: transportId,
+    });
+    console.log("Doc Created!");
+  }
+
+  // const doc = await getDoc(docRef);
+  // if (doc.exists) {
+  //   await updateDoc(docRef, {
+  //     files: arrayUnion(downloadUrl),
+  //   });
+  //   console.log("Doc Updated!");
+  // } else {
+  //   await setDoc(docRef, {
+  //     files: [downloadUrl],
+  //     containerNumber: containerNumber,
+  //     transportNumber: transportId,
+  //   });
+  //   console.log("Doc Created!");
+  // }
 };
 
 export { uploadImageForContainer };
