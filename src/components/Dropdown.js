@@ -3,15 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown as _Dropdown } from "react-native-element-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const Dropdown = ({ data }) => {
-  const [value, setValue] = useState(null);
+const Dropdown = ({ data, onChange, disable, value }) => {
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     if (value || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: "blue" }]}>
-          Select Recipient
+          {!disable && !isFocus ? "Select Recipient" : ""}
         </Text>
       );
     }
@@ -22,13 +21,18 @@ const Dropdown = ({ data }) => {
     <View style={styles.container}>
       {renderLabel()}
       <_Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+        style={[
+          styles.dropdown,
+          isFocus && { borderColor: "blue" },
+          disable && styles.disable,
+        ]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={data}
         search
+        disable={disable}
         maxHeight={300}
         labelField="label"
         valueField="value"
@@ -38,8 +42,9 @@ const Dropdown = ({ data }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          setValue(item.value);
+          // setValue(item.value);
           setIsFocus(false);
+          onChange(item.value);
         }}
         renderLeftIcon={() => (
           <Ionicons
@@ -58,8 +63,11 @@ export default Dropdown;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     padding: 16,
+  },
+  disable: {
+    opacity: 0.5,
+    // backgroundColor: "gray",
   },
   dropdown: {
     height: 50,
@@ -73,7 +81,6 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,
