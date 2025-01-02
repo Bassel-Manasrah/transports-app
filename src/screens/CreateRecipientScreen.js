@@ -4,16 +4,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import Button from "../components/Button";
 import { StatusBar } from "expo-status-bar";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function CreateRecipientScreen() {
-  const [companyName, setCompanyName] = useState("a");
-  const [companyAddress, setCompanyAddress] = useState("a");
-  const [companyPhoneNumber, setCompanyPhoneNumber] = useState("a");
-  const [driverName, setDriverName] = useState("a");
-  const [driverPhoneNumber, setDriverPhoneNumber] = useState("a");
-  const [truckNumber, setTruckNumber] = useState("a");
-  const [sign, setSign] = useState("a");
-  const [comments, setComments] = useState("a");
+export default function CreateRecipientScreen({ navigation }) {
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyPhoneNumber, setCompanyPhoneNumber] = useState("");
+  const [driverName, setDriverName] = useState("");
+  const [driverPhoneNumber, setDriverPhoneNumber] = useState("");
+  const [truckNumber, setTruckNumber] = useState("");
+  const [sign, setSign] = useState("");
+  const [comments, setComments] = useState("");
 
   const [createButtonPressed, setCreateButtonPressed] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -41,6 +42,8 @@ export default function CreateRecipientScreen() {
     } else {
       const url = "https://kareem-transportation.online/api/recipients";
 
+      setLoading(true);
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -52,7 +55,9 @@ export default function CreateRecipientScreen() {
       console.log(response);
 
       console.log(recepient);
-      setLoading(true);
+
+      setLoading(false);
+      navigation.goBack();
     }
     setCreateButtonPressed(true);
   };
@@ -68,6 +73,14 @@ export default function CreateRecipientScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
+        <Ionicons
+          name="arrow-back"
+          color="white"
+          size={24}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        ></Ionicons>
         <Text style={styles.title}>Create Recipient</Text>
       </View>
       <ScrollView contentContainerStyle={styles.formContainer}>
@@ -153,9 +166,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   titleContainer: {
+    width: "100%",
     backgroundColor: "#162534",
     padding: 24,
+    height: "10%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
   },
+
   title: {
     color: "white",
     fontSize: 18,
