@@ -4,10 +4,14 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import { StatusBar } from "expo-status-bar";
+import { saveValue } from "../services/StoreService";
+import { registerForPushNotificationsAsync } from "../services/notificationService";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ route, navigation }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setDriverId } = route.params;
 
   const onPress = async () => {
     const apiUrl =
@@ -37,10 +41,11 @@ export default function LoginScreen({ navigation }) {
     const responseData = await response.json();
     console.log("Login successful, driver: ", responseData);
 
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Transports", params: { driver: responseData } }],
-    });
+    const token = await registerForPushNotificationsAsync(responseData.id);
+
+    await saveValue("driverId", `${responseData.id}`);
+
+    setDriverId(responseData.id);
   };
 
   return (
