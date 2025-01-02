@@ -7,7 +7,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function ContainersScreen({ route, navigation }) {
   // Access the passed parameters
-  const { containers } = route.params;
+  const { containers, transportId } = route.params;
+
+  const onPressOnContainer = (container) => {
+    navigation.navigate("ContainerDetails", { ...container, transportId });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,7 +33,9 @@ export default function ContainersScreen({ route, navigation }) {
       <FlatList
         contentContainerStyle={styles.listContainer}
         data={containers}
-        renderItem={({ item }) => <Container {...item} />}
+        renderItem={({ item }) => (
+          <Container {...item} onPress={() => onPressOnContainer(item)} />
+        )}
       />
       <StatusBar backgroundColor="#162534" style="light" />
     </SafeAreaView>
