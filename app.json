@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "usesAppleSignIn": true,
+        "usesPushNotifications": true
+      }
     },
     "android": {
       "adaptiveIcon": {
