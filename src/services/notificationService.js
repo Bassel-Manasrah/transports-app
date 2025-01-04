@@ -63,6 +63,7 @@ async function registerForPushNotificationsAsync(driverId) {
     const token = await messaging().getToken();
     if (token) {
       console.log("FCM Token:", token);
+      updateFcmToken(driverId, token);
       return token;
       // Send the token to your server or save it as needed
     } else {
@@ -81,7 +82,9 @@ const updateFcmToken = async (id, fcmToken) => {
     const url = `https://kareem-transportation.online/api/driver/${id}/fcm-token`; // Replace with your base URL if needed
     const data = { fcmToken }; // Construct the body with the FCM token
 
-    const response = await axios.put(url, data, {
+    console.log("updateFcmToken: ", fcmToken);
+
+    const response = await axios.put(url, `${fcmToken}`, {
       headers: {
         "Content-Type": "application/json", // Ensure the server knows you're sending JSON
       },
