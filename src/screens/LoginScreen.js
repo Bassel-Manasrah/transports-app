@@ -20,8 +20,8 @@ export default function LoginScreen({ route, navigation }) {
     // const requestBody = { userName, password };
 
     const requestBody = {
-      userName: "enge.sibrahim2024@gmail.com",
-      password: "1234567",
+      userName: "driver@gmail.com",
+      password: "1234",
     };
 
     const response = await fetch(apiUrl, {
@@ -43,8 +43,8 @@ export default function LoginScreen({ route, navigation }) {
 
     const token = await registerForPushNotificationsAsync(responseData.id);
 
+    //TODO: uncomment
     await saveValue("driverId", `${responseData.id}`);
-
     setDriverId(responseData.id);
   };
 
