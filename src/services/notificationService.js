@@ -86,7 +86,7 @@ const updateFcmToken = async (id, fcmToken) => {
 
     const response = await axios.put(url, `${fcmToken}`, {
       headers: {
-        "Content-Type": "application/json", // Ensure the server knows you're sending JSON
+        "Content-Type": "text/plain", // Ensure the server knows you're sending JSON
       },
     });
 
@@ -101,4 +101,16 @@ const updateFcmToken = async (id, fcmToken) => {
   }
 };
 
-export { registerForPushNotificationsAsync };
+async function requestNotificationPermissions() {
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== "granted") {
+    const { status: newStatus } = await Notifications.requestPermissionsAsync();
+    if (newStatus !== "granted") {
+      alert(
+        "Permission to send notifications is required! enable it from the settings for the app to work properly"
+      );
+    }
+  }
+}
+
+export { registerForPushNotificationsAsync, requestNotificationPermissions };

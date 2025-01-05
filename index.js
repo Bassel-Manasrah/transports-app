@@ -10,16 +10,6 @@ import messaging from "@react-native-firebase/messaging";
 import notifee from "@notifee/react-native";
 import * as Notifications from "expo-notifications";
 
-async function requestPermissions() {
-  const { status } = await Notifications.getPermissionsAsync();
-  if (status !== "granted") {
-    const { status: newStatus } = await Notifications.requestPermissionsAsync();
-    if (newStatus !== "granted") {
-      alert("Permission to send notifications is required!");
-    }
-  }
-}
-
 // Schedule a notification
 async function pushNotification({ title, body }) {
   await Notifications.scheduleNotificationAsync({

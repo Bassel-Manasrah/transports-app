@@ -5,7 +5,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import { StatusBar } from "expo-status-bar";
 import { saveValue } from "../services/StoreService";
-import { registerForPushNotificationsAsync } from "../services/notificationService";
+import {
+  registerForPushNotificationsAsync,
+  requestNotificationPermissions,
+} from "../services/notificationService";
 
 export default function LoginScreen({ route, navigation }) {
   const [userName, setUserName] = useState("");
@@ -42,6 +45,8 @@ export default function LoginScreen({ route, navigation }) {
     console.log("Login successful, driver: ", responseData);
 
     const token = await registerForPushNotificationsAsync(responseData.id);
+
+    requestNotificationPermissions();
 
     //TODO: uncomment
     await saveValue("driverId", `${responseData.id}`);
