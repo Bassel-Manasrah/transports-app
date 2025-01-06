@@ -22,8 +22,6 @@ import {
 } from "../services/recipientService";
 import { getImages } from "../services/imageService";
 import { useFocusEffect } from "@react-navigation/native";
-// import GridImageView from "react-native-grid-image-viewer";
-// import Gallery from "react-native-awesome-gallery";
 
 const dummy_images = [
   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/ChessSet.jpg/640px-ChessSet.jpg",
@@ -172,6 +170,7 @@ export default function ContainerDetailsScreen({ route, navigation }) {
             images={images}
             onLongPress={onImageLongPress}
             loading={galleryLoading}
+            navigation={navigation}
           />
         </View>
 

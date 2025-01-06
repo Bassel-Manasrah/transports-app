@@ -1,10 +1,19 @@
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Transport from "../components/Transport";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CircularBadge from "../components/CircularBadge";
 import Chip from "../components/Chip";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const dummy = [
   {
@@ -84,33 +93,9 @@ export default function TransportsScreen({ route, navigation }) {
   console.log(route.params);
 
   // Access the passed parameters
-  const { driver } = route.params;
+  const { driver, logout } = route.params;
 
   console.log(driver);
-
-  const containers = [
-    {
-      containerNumber: "w2345",
-      status: "IN_TRANSIT",
-      customer: {
-        name: "Hamezaveh",
-      },
-    },
-    {
-      containerNumber: "w2345",
-      status: "IN_TRANSIT",
-      customer: {
-        name: "Hamezaveh",
-      },
-    },
-    {
-      containerNumber: "w2345",
-      status: "IN_TRANSIT",
-      customer: {
-        name: "Hamezaveh",
-      },
-    },
-  ];
 
   const fetchTransports = async () => {
     const { id } = driver;
@@ -146,6 +131,14 @@ export default function TransportsScreen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContianer}>
         <Text style={styles.title}>Hello</Text>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.logoutContainer}
+          onPress={logout}
+        >
+          <Ionicons name="log-out-outline" size={24} color="white" />
+          <Text style={{ color: "white" }}>Logout</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.listContainer}>
         <View style={styles.filtersContainer}>
@@ -178,6 +171,7 @@ export default function TransportsScreen({ route, navigation }) {
           </Chip>
         </View>
         <FlatList
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatListContainer}
           data={
             selectedFilter === "all"
@@ -208,6 +202,7 @@ export default function TransportsScreen({ route, navigation }) {
           )}
         />
       </View>
+
       <StatusBar style="light" backgroundColor="#162534" />
     </SafeAreaView>
   );
@@ -226,6 +221,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
   },
+  logoutContainer: {
+    marginLeft: "auto",
+    flexDirection: "row",
+    color: "white",
+    gap: 8,
+  },
   filtersContainer: {
     // padding: 16,
     // backgroundColor: "lightblue",
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 20,
     paddingVertical: 12,
+    flex: 1,
     // backgroundColor: "yellow",
   },
   flatListContainer: {

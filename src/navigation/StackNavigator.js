@@ -7,6 +7,7 @@ import ContainersScreen from "../screens/ContainersScreen";
 import ContainerDetailsScreen from "../screens/ContainerDetailsScreen";
 import CreateRecipientScreen from "../screens/CreateRecipientScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,11 @@ export default function StackNavigator() {
     checkLoginStatus();
   }, []);
 
+  const logout = async () => {
+    await AsyncStorage.removeItem("driverId");
+    setDriverId(null);
+  };
+
   return (
     <Stack.Navigator>
       {driverId ? (
@@ -39,7 +45,7 @@ export default function StackNavigator() {
             name="Transports"
             component={TransportsScreen}
             options={{ headerShown: false }}
-            initialParams={{ driver: { id: driverId } }}
+            initialParams={{ driver: { id: driverId }, logout }}
           />
           <Stack.Screen
             name="Containers"
@@ -50,6 +56,11 @@ export default function StackNavigator() {
             name="ContainerDetails"
             component={ContainerDetailsScreen}
             options={{ headerShown: false, animation: "slide_from_right" }}
+          />
+          <Stack.Screen
+            name="ImagePreview"
+            component={ImagePreviewScreen}
+            options={{ headerShown: false, animation: "none" }}
           />
           <Stack.Screen
             name="CreateRecipient"
