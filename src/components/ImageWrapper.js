@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
 
-export default function ImageWrapper({ uri }) {
+export default function ImageWrapper({ uri, onPress }) {
   const [isPdf, setIsPdf] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -33,23 +39,25 @@ export default function ImageWrapper({ uri }) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      {isPdf ? (
-        // If it's a PDF, display the placeholder
-        <Image
-          source={require("../../assets/pdf-placeholder.png")}
-          style={{
-            width: 100,
-            height: 100,
-            alignSelf: "center",
-            backgroundColor: "blue",
-          }}
-        />
-      ) : (
-        // If it's an image, display it
-        <Image source={{ uri }} style={{ height: "100%", width: "100%" }} />
-      )}
-    </View>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={{ flex: 1 }}>
+        {isPdf ? (
+          // If it's a PDF, display the placeholder
+          <Image
+            source={require("../../assets/pdf-placeholder.png")}
+            style={{
+              width: 100,
+              height: 100,
+              alignSelf: "center",
+              backgroundColor: "blue",
+            }}
+          />
+        ) : (
+          // If it's an image, display it
+          <Image source={{ uri }} style={{ height: "100%", width: "100%" }} />
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
