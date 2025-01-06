@@ -127,6 +127,14 @@ export default function TransportsScreen({ route, navigation }) {
     fetchTransports();
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchTransports();
+    }, 10 * 60 * 1000); // 10 minutes in milliseconds
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContianer}>
