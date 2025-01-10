@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Linking,
+  ActivityIndicator,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,10 +21,13 @@ import {
 export default function LoginScreen({ route, navigation }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { setDriverId } = route.params;
 
   const onPress = async () => {
+    setLoading(true);
+
     const apiUrl =
       "https://kareem-transportation.online/api/users/driver/login";
 
@@ -51,6 +62,8 @@ export default function LoginScreen({ route, navigation }) {
     //TODO: uncomment
     await saveValue("driverId", `${responseData.id}`);
     setDriverId(responseData.id);
+
+    setLoading(false);
   };
 
   return (
