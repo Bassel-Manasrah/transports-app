@@ -66,6 +66,21 @@ export default function LoginScreen({ route, navigation }) {
     setLoading(false);
   };
 
+  const handleForgotPasswordPress = async () => {
+    const url = "https://kareem-transportation.online/#/forgot-password";
+
+    // Open the URL
+    await Linking.openURL(url);
+  };
+
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="royalblue" />
+        <StatusBar style="dark" />
+      </View>
+    );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContianer}>
@@ -88,7 +103,14 @@ export default function LoginScreen({ route, navigation }) {
       </View>
       <View style={styles.buttonContainer}>
         <Button onPress={onPress}>Login</Button>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={handleForgotPasswordPress}
+        >
+          <Text style={styles.forgotPasswordText}>Forgot Password</Text>
+        </TouchableOpacity>
       </View>
+
       <StatusBar backgroundColor="#162534" style="light" />
     </SafeAreaView>
   );
@@ -116,5 +138,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: "auto",
     padding: 16,
+  },
+  forgotPasswordText: {
+    padding: 16,
+    textAlign: "center",
+    color: "royalblue",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
