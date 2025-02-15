@@ -31,12 +31,12 @@ export default function LoginScreen({ route, navigation }) {
     const apiUrl =
       "https://kareem-transportation.online/api/users/driver/login";
 
-    // const requestBody = { userName, password };
+    const requestBody = { userName, password };
 
-    const requestBody = {
-      userName: "driver@gmail.com",
-      password: "1234",
-    };
+    // const requestBody = {
+    //   userName: "driver@gmail.com",
+    //   password: "1234",
+    // };
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -50,6 +50,7 @@ export default function LoginScreen({ route, navigation }) {
         "Login Failed",
         "You have entered a wrong username or password"
       );
+      setLoading(false);
       return;
     }
     const responseData = await response.json();

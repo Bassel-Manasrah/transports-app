@@ -14,6 +14,7 @@ import CircularBadge from "../components/CircularBadge";
 import Chip from "../components/Chip";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RefreshControl } from "react-native-gesture-handler";
 
 const dummy = [
   {
@@ -90,12 +91,20 @@ export default function TransportsScreen({ route, navigation }) {
 
   const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
   console.log(route.params);
 
   // Access the passed parameters
   const { driver, logout } = route.params;
 
   console.log(driver);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTransports();
+    setRefreshing(false);
+  };
 
   const fetchTransports = async () => {
     const { id } = driver;
@@ -110,7 +119,11 @@ export default function TransportsScreen({ route, navigation }) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    let data = await response.json();
+
+    // Sort transports from latest to oldest
+    data.sort((a, b) => new Date(b.sendingDate) - new Date(a.sendingDate));
+
     setTransports(data);
 
     const { today, thisWeek, thisMonth, all } = categorizeTransports(data);
@@ -119,8 +132,6 @@ export default function TransportsScreen({ route, navigation }) {
     setWeekTransports(thisWeek);
     setMonthTransports(thisMonth);
     setAllTransports(all);
-
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -181,6 +192,9 @@ export default function TransportsScreen({ route, navigation }) {
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatListContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           data={
             selectedFilter === "all"
               ? allTransports
